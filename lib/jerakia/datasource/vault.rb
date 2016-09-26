@@ -10,7 +10,10 @@ class Jerakia::Datasource
       option :port,       { :type => Integer, :default => 8200 }
       option :scheme,     { :type => Symbol, :default => :http }
       option :token,      { :type => String }
-      option :searchpath, { :type => Array, :default => [ 'secret' ] }
+      option :searchpath, { :type => Array,  :default => [ 'secret' ] }
+      option :dig,        { :type => [ FalseClass, TrueClass ], :default => true }
+      option :key,        { :type => Symbol, :default => lookup.request.key.to_sym }
+
 
       
 
@@ -57,13 +60,20 @@ class Jerakia::Datasource
 
         Jerakia.log.debug("[jerakia-vault]: looking up #{level}")
 
+        level << "/#{lookup.request.key}" unless options[:dig]
+
+
         secret = vault.logical.read(level)
 
         if secret.is_a?(::Vault::Secret)
           Jerakia.log.debug("[jerakia-vault]: valid answer returned")
-          if result = secret.data[lookup.request.key.to_sym]
-            Jerakia.log.debug("[jerakia-vault]: found key #{lookup.request.key.to_sym}")
-            response.submit result
+          if options[:dig]
+            if result = secret.data[options[:key]]
+              Jerakia.log.debug("[jerakia-vault]: found key #{lookup.request.key.to_sym}")
+              response.submit result
+            end
+          else
+            response.submit secret.data unless secret.data.empty?
           end
         end
       end
