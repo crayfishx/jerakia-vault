@@ -12,6 +12,8 @@ class Jerakia::Datasource
       option :token,      { :type => String }
       option :searchpath, { :type => Array, :default => [ 'secret' ] }
 
+      
+
       addr = "#{options[:scheme].to_s}://#{options[:host]}:#{options[:port]}"
 
       
@@ -38,8 +40,14 @@ class Jerakia::Datasource
         conf.token   = options[:token] if options[:token]
       end
 
-      raise Jerakia::Error, "Connected to sealed vault" if vault.sys.seal_status.sealed?
-      Jerakia.log.debug("[jerakia-vault]: Connected to vault #{vault}")
+
+      begin
+        sealed = vault.sys.seal_status.sealed?
+      rescue ::Vault::HTTPConnectionError => e
+        raise Jerakia::Error, "Cannot connect to vault server.  #{e.message}"
+      end
+
+      raise Jerakia::Error, "Connected to sealed vault" if sealed
 
       hierarchy.each do |level|
 
@@ -48,6 +56,7 @@ class Jerakia::Datasource
         return unless response.want?
 
         Jerakia.log.debug("[jerakia-vault]: looking up #{level}")
+
         secret = vault.logical.read(level)
 
         if secret.is_a?(::Vault::Secret)
