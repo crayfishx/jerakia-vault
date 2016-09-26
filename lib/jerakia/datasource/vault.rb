@@ -11,27 +11,15 @@ class Jerakia::Datasource
       option :scheme,     { :type => Symbol, :default => :http }
       option :token,      { :type => String }
       option :searchpath, { :type => Array,  :default => [ 'secret' ] }
-      option :dig,        { :type => [ FalseClass, TrueClass ], :default => true }
       option :key,        { :type => Symbol, :default => lookup.request.key.to_sym }
+      option :dig,        { :type => [ FalseClass, TrueClass ], :default => true }
+      option :map_key,    { :type => [ FalseClass, TrueClass], :default => false }
 
 
       
 
       addr = "#{options[:scheme].to_s}://#{options[:host]}:#{options[:port]}"
 
-      
-      # Map the searchpath to include the namespace for the request
-      # Eg: if searchpath is [ 'secret' ] and the namespace is [ 'mysql' ]
-      # and our lookup key is 'password' then we will lookup the key 
-      # password from the hash in secret/mysql
-      #
-      # Represented in vault as something like;
-      #
-      # # vault read secret/mysql
-      # Key               Value
-      # ---               -----
-      # refresh_interval  720h0m0s
-      # password          bar
       hierarchy = options[:searchpath].map { |s| [s, lookup.request.namespace ].flatten.join("/") }
 
       Jerakia.log.debug("[jerakia-vault]: Using address #{addr}")
@@ -58,9 +46,10 @@ class Jerakia::Datasource
         # it doesn't want any more.
         return unless response.want?
 
-        Jerakia.log.debug("[jerakia-vault]: looking up #{level}")
 
-        level << "/#{lookup.request.key}" unless options[:dig]
+        level << "/#{lookup.request.key}" if options[:map_key]
+
+        Jerakia.log.debug("[jerakia-vault]: looking up #{level}")
 
 
         secret = vault.logical.read(level)
