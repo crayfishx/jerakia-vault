@@ -26,11 +26,11 @@ end
 
 The vault datasource takes a number of parameters:
 
-`host`: The vault host to connect to, default: `127.0.0.1`
-`port`: The port to use for connecting to vault, default: `8200`
-`schema`: The URL scheme to use, default: `http`
-`token`: An optional token to use for authentication, if not supplied, vault will attempt to read the `VAULT_TOKEN` environment variable
-`searchpath`: An array of search paths to be queried in order, by default this is set to `[ 'secret' ]`
+* `host`: The vault host to connect to, default: `127.0.0.1`
+* `port`: The port to use for connecting to vault, default: `8200`
+* `schema`: The URL scheme to use, default: `http`
+* `token`: An optional token to use for authentication, if not supplied, vault will attempt to read the `VAULT_TOKEN` environment variable
+* `searchpath`: An array of search paths to be queried in order, by default this is set to `[ 'secret' ]`
 
 
 ## Example
