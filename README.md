@@ -3,6 +3,7 @@
 ## Description
 
 [_Vault_](http://vaultproject.io) is a secure store for secret data such as passwords, certificates...etc with strict controls on access. 
+
 [_Jerakia_](http://jerakia.io) is a data lookup tool for configuration management systems such as Puppet that supports multiple pluggable datasources
 
 
