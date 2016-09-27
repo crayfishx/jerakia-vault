@@ -13,6 +13,13 @@ jerakia-vault is a data source for the lookup tool [Jerakia](http://jerakia.io) 
 * Vault
 * Jerakia
 
+## Installation 
+
+```
+#  gem install jerakia-datasource-vault
+```
+
+
 ## Reference 
 
 ### Usage
