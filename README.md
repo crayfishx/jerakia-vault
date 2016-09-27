@@ -56,9 +56,9 @@ lookup :default do
   ...
 
   datasource :vault, {
-    host:   '127.0.0.1',
-    port:   8200,
-    searchpath:  [
+    :host        => '127.0.0.1',
+    :port        => 8200,
+    :searchpath  => [
       'secret/#{scope[:environment]}',
       'secret/common',
     ]
@@ -116,8 +116,8 @@ In this scenario, we need to tell jerakia-vault to append the lookup key to vaul
 
 ```ruby
   datasource :vault, {
-    map_key: true,
-    field:   :value,
+    :map_key => true,
+    :field   => :value,
   }
 ```
 
@@ -138,7 +138,7 @@ The third lookup behaviour supported is to always return the entire hash of data
 
 ```ruby
   datasource :vault, {
-    dig: false,
+    :dig => false,
   }
 ```
 
