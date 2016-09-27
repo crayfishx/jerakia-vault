@@ -83,7 +83,7 @@ lookup :default do
 
 ## Lookup behaviour.
 
-Vault stores data as key value pairs under a path, depending on what structure you decide to store your data you can configure jerakia-vault in one of three waus.
+Vault stores data as key value pairs under a path, depending on what structure you decide to store your data you can configure jerakia-vault in one of three ways.
 
 ### Individual key lookups
 
